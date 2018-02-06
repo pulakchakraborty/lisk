@@ -16,7 +16,6 @@
 var popsicle = require('popsicle');
 var async = require('async');
 var Promise = require('bluebird');
-
 var slots = require('../../../helpers/slots');
 var apiHelpers = require('../helpers/api');
 
@@ -119,7 +118,6 @@ function newBlock(height, blocksToWait, cb) {
 		return setImmediate(cb, null, height);
 	}
 
-	var actualHeight = height;
 	var counter = 1;
 	var target = height + blocksToWait;
 
@@ -135,7 +133,6 @@ function newBlock(height, blocksToWait, cb) {
 						['Received bad response code', res.status, res.url].join(' ')
 					);
 				}
-
 				__testContext.debug(
 					'	Waiting for block:'.grey,
 					'Height:'.grey,
@@ -145,11 +142,7 @@ function newBlock(height, blocksToWait, cb) {
 					'Second:'.grey,
 					counter++
 				);
-
-				if (target === res.body.data.height) {
-					height = res.body.data.height;
-				}
-
+				height = res.body.data.height;
 				setTimeout(cb, 1000);
 			});
 
@@ -158,7 +151,7 @@ function newBlock(height, blocksToWait, cb) {
 			});
 		},
 		() => {
-			return actualHeight >= height;
+			return height < target;
 		},
 		err => {
 			if (err) {
