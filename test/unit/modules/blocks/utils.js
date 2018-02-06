@@ -132,6 +132,11 @@ describe('blocks/utils', () => {
 				'Blocks->Utils: Submodule initialized.'
 			);
 		});
+
+		it('should return self', () => {
+			expect(blocksUtilsModule).to.be.an('object');
+			expect(blocksUtilsModule.readDbRows).to.be.a('function');
+		});
 	});
 
 	describe('onBind', () => {
