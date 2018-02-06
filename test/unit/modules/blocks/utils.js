@@ -15,6 +15,7 @@
 
 var rewire = require('rewire');
 var modulesLoader = require('../../../common/modules_loader');
+
 var BlocksUtils = rewire('../../../../modules/blocks/utils.js');
 
 var viewRow_full_blocks_list = [
