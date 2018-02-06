@@ -504,8 +504,9 @@ describe('blocks/utils', () => {
 		it('should return error when account.get fails', done => {
 			blocksUtilsModule.aggregateBlocksReward(
 				{ address: 'ERRL' },
-				err => {
-					expect(err).to.equal('Address Error Stub');
+				(err, data) => {
+					expect(err).to.equal('Address error stub');
+					expect(data).to.be.undefined;
 					done();
 				}
 			);
@@ -514,23 +515,23 @@ describe('blocks/utils', () => {
 		it('should return error when account not found', done => {
 			blocksUtilsModule.aggregateBlocksReward(
 				{ address: '0L' },
-				err => {
+				(err, data) => {
 					expect(err).to.equal('Account not found');
+					expect(data).to.be.undefined;
 					done();
 				}
 			);
 		});
 
-		it('should return error when aggregateBlocksReward sql fails', done => {
-			loggerStub.error.reset();
-
+		it('should return error when library.db.blocks.aggregateBlocksReward fails', done => {
 			blocksUtilsModule.aggregateBlocksReward(
 				{ address: '1L' },
-				err => {
+				(err, data) => {
 					expect(loggerStub.error.args[0][0]).to.contains(
 						"TypeError: Cannot read property '0' of undefined"
 					);
 					expect(err).to.equal('Blocks#aggregateBlocksReward error');
+					expect(data).to.be.undefined;
 					done();
 				}
 			);
@@ -543,8 +544,9 @@ describe('blocks/utils', () => {
 
 			blocksUtilsModule.aggregateBlocksReward(
 				{ address: '1L' },
-				err => {
+				(err, data) => {
 					expect(err).to.equal('Account is not a delegate');
+					expect(data).to.be.undefined;
 					done();
 				}
 			);
@@ -557,10 +559,11 @@ describe('blocks/utils', () => {
 
 			blocksUtilsModule.aggregateBlocksReward(
 				{ address: '1L' },
-				(err, cb) => {
-					expect(cb.fees).to.equal(1);
-					expect(cb.count).to.equal(100);
-					expect(cb.rewards).to.equal('0');
+				(err, data) => {
+					expect(data).to.be.an('object');
+					expect(data.fees).to.equal(1);
+					expect(data.count).to.equal(100);
+					expect(data.rewards).to.equal('0');
 					done();
 				}
 			);
